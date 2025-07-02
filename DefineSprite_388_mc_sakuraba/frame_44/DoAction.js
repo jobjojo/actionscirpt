@@ -1,36 +1,162 @@
-angle = (Math.abs(Math.atan2(control.vy,control.vx)) / 0.017453292519943295 + 45) % 90 * 70 / 90 + 10;
-v = Math.sqrt(control.vx * control.vx + control.vy * control.vy);
-control.vx = v * Math.cos(angle * 3.141592653589793 / 180);
-control.vy = v * Math.sin(angle * 3.141592653589793 / 180);
-if(angle >= 45)
-{
-   up_mc._visible = true;
-   down_mc._visible = false;
-}
-else
-{
-   up_mc._visible = false;
-   down_mc._visible = true;
-}
-control.slow2(30,1);
-movecount = 0;
-x1a = 300 + 100 * Math.random();
-x1b = 50 + 300 * Math.random();
-x2 = 100 + 100 * Math.random();
-moveobjsub = function()
-{
-   movecount++;
-   curry1a_mc._x = movecount / 30 * x1a;
-   curry1a_mc._y = (movecount - 10) * (movecount - 10) / 20 / 20 * 200 - 200;
-   curry1a_mc._rotation += 5;
-   curry1b_mc._x = movecount / 30 * x1b;
-   curry1b_mc._y = (movecount - 10) * (movecount - 10) / 20 / 20 * 200 - 200;
-   curry1b_mc._rotation += 10;
-   curry2_mc._x = movecount / 30 * x2;
-   curry2_mc._y = (movecount - 10) * (movecount - 10) / 20 / 20 * 200 - 200;
-   curry2_mc._rotation += 15;
-   if(movecount == 30)
-   {
-      delete moveobjsub;
+/**
+ * ActionScript code for `DefineSprite_388_mc_sakuraba`, frame 44's `DoAction` script.
+ * This script calculates and applies new `vx` and `vy` (velocities) for `control`
+ * based on the current velocities, and then adjusts `up_mc` and `down_mc` visibility
+ * based on the calculated angle. It also applies a slow-motion effect. Finally,
+ * it sets up a `moveobjsub` function to animate 'curry' MovieClips with random
+ * positions and rotations.
+ *
+ * This is very similar to the script in `DefineSprite_388_mc_sakuraba/frame_11/DoAction.txt`,
+ * but it explicitly omits setting `control.setspecial(code.youko, false)`.
+ *
+ * In JavaScript, this would be part of a method or state logic within the `mc_sakuraba` class.
+ * It assumes `this` refers to the `mc_sakuraba` MovieClip instance, and it interacts with
+ * `control` (GameControl object), `up_mc`, `down_mc`, `curryX_mc` (child MovieClips).
+ */
+function DoAction_DefineSprite_388_mc_sakuraba_frame_44() {
+   // Assuming 'this' refers to the mc_sakuraba MovieClip instance.
+
+   // Calculate new angle based on current velocities.
+   // Assumes `control` is a global or accessible instance of GameControl
+   // and has `vx` and `vy` properties.
+   if (typeof control !== 'undefined' && control.vx !== undefined && control.vy !== undefined) {
+      // The constant 0.017453292519943295 is Math.PI / 180 (degrees to radians conversion).
+      let angle = (Math.abs(Math.atan2(control.vy, control.vx)) / (Math.PI / 180) + 45) % 90 * 70 / 90 + 10;
+
+      // Calculate magnitude of velocity vector.
+      let v = Math.sqrt(control.vx * control.vx + control.vy * control.vy);
+
+      // Apply new velocities based on calculated angle and magnitude.
+      control.vx = v * Math.cos(angle * Math.PI / 180);
+      control.vy = v * Math.sin(angle * Math.PI / 180);
+
+      // Control visibility of `up_mc` and `down_mc` based on angle.
+      // Assumes `up_mc` and `down_mc` are child MovieClips with `_visible` property.
+      if (this.up_mc && this.down_mc) {
+         if (angle >= 45) {
+            this.up_mc._visible = true;
+            this.down_mc._visible = false;
+         } else {
+            this.up_mc._visible = false;
+            this.down_mc._visible = true;
+         }
+      }
    }
-};
+
+   // Apply slow effect (slow2 means slow down by distance).
+   // Assumes `control` has a `slow2` method.
+   if (typeof control !== 'undefined' && control.slow2) {
+      control.slow2(30, 1); // Slow for 30 frames, with a distance factor of 1.
+   }
+
+   let movecount = 0; // Animation frame counter for `moveobjsub`.
+   let x1a = 300 + 100 * Math.random(); // Random X offset for curry1a.
+   let x1b = 50 + 300 * Math.random(); // Random X offset for curry1b.
+   let x2 = 100 + 100 * Math.random(); // Random X offset for curry2.
+   let moveobjsub = null; // Function to be set dynamically for 'curry' animation.
+
+   // `moveobjsub` is an internal function for animating 'curry' MovieClips.
+   moveobjsub = () => { // Use arrow function to preserve 'this' context.
+      movecount++;
+      // Animate position and rotation for `curry1a_mc`.
+      if (this.curry1a_mc) {
+         this.curry1a_mc._x = movecount / 30 * x1a;
+         this.curry1a_mc._y = (movecount - 10) * (movecount - 10) / 20 / 20 * 200 - 200;
+         this.curry1a_mc._rotation += 5;
+      }
+      // Animate position and rotation for `curry1b_mc`.
+      if (this.curry1b_mc) {
+         this.curry1b_mc._x = movecount / 30 * x1b;
+         this.curry1b_mc._y = (movecount - 10) * (movecount - 10) / 20 / 20 * 200 - 200;
+         this.curry1b_mc._rotation += 10;
+      }
+      // Animate position and rotation for `curry2_mc`.
+      if (this.curry2_mc) {
+         this.curry2_mc._x = movecount / 30 * x2;
+         this.curry2_mc._y = (movecount - 10) * (movecount - 10) / 20 / 20 * 200 - 200;
+         this.curry2_mc._rotation += 15;
+      }
+
+      if (movecount === 30) {
+         moveobjsub = null; // Animation complete: delete the reference.
+      }
+   };
+}
+
+// How this might be structured in a JavaScript class (conceptual, part of mc_sakuraba):
+/*
+class mc_sakuraba extends GameCharacter { // Extending GameCharacter as per previous conversion
+   constructor() {
+      super();
+      // ... other initialization ...
+      // Mock child MovieClips
+      this.up_mc = { _visible: false };
+      this.down_mc = { _visible: false };
+      this.curry1a_mc = { _x: 0, _y: 0, _rotation: 0 };
+      this.curry1b_mc = { _x: 0, _y: 0, _rotation: 0 };
+      this.curry2_mc = { _x: 0, _y: 0, _rotation: 0 };
+
+      // External `control` object
+      window.control = window.control || {
+          vx: 0, vy: 0,
+          slow2: (f, d) => console.log(`Control slow2: ${f}, ${d}`)
+      };
+
+      this.moveobjsub = null; // Internal property for animation function
+   }
+
+   onFrame44Action() {
+      if (window.control) {
+         let angle = (Math.abs(Math.atan2(window.control.vy, window.control.vx)) / (Math.PI / 180) + 45) % 90 * 70 / 90 + 10;
+         let v = Math.sqrt(window.control.vx * window.control.vx + window.control.vy * window.control.vy);
+         window.control.vx = v * Math.cos(angle * Math.PI / 180);
+         window.control.vy = v * Math.sin(angle * Math.PI / 180);
+
+         if (this.up_mc && this.down_mc) {
+            if (angle >= 45) {
+               this.up_mc._visible = true;
+               this.down_mc._visible = false;
+            } else {
+               this.up_mc._visible = false;
+               this.down_mc._visible = true;
+            }
+         }
+         if (window.control.slow2) {
+            window.control.slow2(30, 1);
+         }
+      }
+
+      let movecount = 0;
+      const x1a = 300 + 100 * Math.random();
+      const x1b = 50 + 300 * Math.random();
+      const x2 = 100 + 100 * Math.random();
+
+      this.moveobjsub = () => { // This will be the actual onEnterFrame logic for this animation
+         movecount++;
+         if (this.curry1a_mc) {
+            this.curry1a_mc._x = (movecount / 30) * x1a;
+            this.curry1a_mc._y = (Math.pow(movecount - 10, 2) / 400) * 200 - 200; // (movecount-10)^2 / (20^2) * 200
+            this.curry1a_mc._rotation += 5;
+         }
+         if (this.curry1b_mc) {
+            this.curry1b_mc._x = (movecount / 30) * x1b;
+            this.curry1b_mc._y = (Math.pow(movecount - 10, 2) / 400) * 200 - 200;
+            this.curry1b_mc._rotation += 10;
+         }
+         if (this.curry2_mc) {
+            this.curry2_mc._x = (movecount / 30) * x2;
+            this.curry2_mc._y = (Math.pow(movecount - 10, 2) / 400) * 200 - 200;
+            this.curry2_mc._rotation += 15;
+         }
+
+         if (movecount === 30) {
+            this.moveobjsub = null; // Stop animation
+         } else {
+            requestAnimationFrame(this.moveobjsub); // Schedule next frame
+         }
+      };
+      // To start this animation, you would call:
+      // requestAnimationFrame(this.moveobjsub);
+   }
+}
+*/
