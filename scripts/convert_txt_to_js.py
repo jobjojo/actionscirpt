@@ -62,7 +62,7 @@ def duplicate_txt_to_js(start_path):
 
 # Define the target directory path
 # Use a raw string (r"...") to handle backslashes correctly in Windows paths.
-target_directory = r"C:\Users\ayub_\Desktop\scripts"
+target_directory = r""
 
 # Call the function to start the duplication process
 duplicate_txt_to_js(target_directory)
